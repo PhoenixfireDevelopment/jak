@@ -1,0 +1,42 @@
+en:
+  attributes:
+    created_at: 'Created'
+    updated_at: 'Updated'
+    uuid: 'UUID'
+  date:
+    formats:
+      default: "%m/%d/%Y"
+      short: "%b %d"
+      long: "%B %d, %Y"
+  time:
+    formats:
+      default: '%A %b %e %Y, %l:%M%p'
+      short: "%m/%d/%y %l:%M%p"
+      datetimepicker: "%Y/%m/%d %l:%M %p"
+      compact: "%m/%d/%Y"
+      long: "%B %d, %Y %H:%M%p"
+    am: "am"
+    pm: "pm"
+  activerecord:
+    attributes:
+      company:
+        jak:
+          test: 'Test the Company'
+      tenant:
+        active: 'Active'
+        name: "Name"
+        jak:
+          manage: "Grants all power to create, read, update, and remove companies for the tenant."
+          show: "Permits viewing details about my super cool tenant"
+          edit: "Permits viewing the edit tenant button and page for the tenant."
+          update: "Permits updating an existing tenant for the tenant."
+  jak:
+    constraints:
+      manage: "Grants all power to create, read, update, and remove constraints for the tenant."
+      index: "Permits viewing the index of all constraints for the tenant."
+      show: "Permits viewing a specific constraint for the tenant."
+      new: "Permits viewing the new constraint button and page for the tenant."
+      create: "Permits creating a new constraint for the tenant."
+      edit: "Permits viewing the edit constraint button and page for the tenant."
+      update: "Permits updating an existing constraint for the tenant."
+      destroy: "Permits removing an existing constraint from the tenant."

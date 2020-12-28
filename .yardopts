@@ -1,0 +1,5 @@
+--exclude app/mailers/jak/application_mailer.rb
+--exclude app/jobs/jak/application_job.rb
+--exclude spec/dummy/app/jobs/application_job.rb
+--exclude db/migrate
+--exclude spec/factories

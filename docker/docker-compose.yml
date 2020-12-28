@@ -1,0 +1,43 @@
+version: '3.3'
+services:
+  jak:
+    image: jak
+    build:
+      context: ../
+      dockerfile: docker/Dockerfile
+      args:
+        - RAILS_ENV=development
+    env_file:
+      - .env
+    volumes:
+      - ../:/app/src
+      - ~/.ssh:/root/.ssh
+      - jak_bundle_cache:/bundle
+    depends_on:
+      - jak_db
+      - jak_mongo
+    ports:
+      - "3000:3000"
+
+  jak_db:
+    image: mariadb
+    volumes:
+      - maria_db_volume:/var/lib/mysql
+    env_file:
+      - .env
+    ports:
+      - "13371:3306"
+
+  jak_mongo:
+    image: mongo
+    command: --quiet
+    restart: always
+    volumes:
+      - jak_mongo_data:/data/db
+    env_file:
+      - .env
+
+volumes:
+  jak_bundle_cache:
+  jak_mongo_data:
+  maria_db_volume:
