@@ -22,7 +22,7 @@ services:
   jak_db:
     image: mariadb
     volumes:
-      - maria_db_volume:/var/lib/mysql
+      - jak_maria_db_volume:/var/lib/mysql
     env_file:
       - .env
     ports:
@@ -40,4 +40,4 @@ services:
 volumes:
   jak_bundle_cache:
   jak_mongo_data:
-  maria_db_volume:
+  jak_maria_db_volume:
