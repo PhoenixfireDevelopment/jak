@@ -53,15 +53,35 @@ module Jak
       end
 
       def permission_ids=(my_permission_ids = [])
-        my_permission_ids.each do |permission_id|
-          my_grant = Jak::Grant.find_or_initialize_by(permission: permission_id)
+        # What if my_permissions_ids is an empty list?
+        my_permission_ids = my_permission_ids.flatten.compact.reject(&:blank?)
 
-          # Add this unless it already exists
-          next unless my_grant.present?
+        # They're removing all permissions
+        if my_permission_ids.empty?
+          # This is basically the same as deleting the role, but without deleting the Role record itself
+          send(:pull_role_id_from_grant)
+        else
+          all_ids = permission_ids.map(&:to_s)
+          orphaned_ids = all_ids - my_permission_ids
+          orphaned_grants = Jak::Grant.where(:permission_id.in => orphaned_ids.flatten.compact.reject(&:blank?))
 
-          my_grant.role_ids ||= []
-          my_grant.role_ids.push(id) unless my_grant.role_ids.include?(id)
-          my_grant.save
+          orphaned_grants.each do |orphan|
+            orphan.pull(role_ids: id)
+          end
+
+          # N+1?
+          # Adding or updating
+          my_permission_ids.each do |permission_id|
+            my_grant = Jak::Grant.find_or_initialize_by(permission: permission_id)
+
+            # Add this unless it already exists
+            next unless my_grant.present?
+
+            my_grant.role_ids ||= []
+            my_grant.role_ids.push(id) unless my_grant.role_ids.include?(id)
+
+            my_grant.save
+          end
         end
       end
 

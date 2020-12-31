@@ -36,5 +36,40 @@ RSpec.describe Role, type: :model do
         expect(build(:role, name: 'ROLE', company: company_2)).to be_valid
       end
     end
+
+    describe 'concerning .permission_ids/1' do
+      before(:each) do
+        @role = create(:role, name: 'Sales Representative')
+        @permissions = Jak::Permission.all.limit(2).to_a
+        @ids = @permissions.map { |k| k._id.to_s }
+        @role.permission_ids = @ids
+        @role.save
+      end
+
+      it 'assigns some random permissions for the test' do
+        expect(@role.permissions(true)).to_not be_empty
+      end
+
+      it 'can remove just the last permission' do
+        expect do
+          @role.permission_ids = [@ids.first]
+          @role.save
+        end.to change { @role.permissions(true) }.from(@permissions).to([@permissions.first])
+      end
+
+      it 'can remove just the first permission' do
+        expect do
+          @role.permission_ids = [@ids.last]
+          @role.save
+        end.to change { @role.permissions(true) }.from(@permissions).to([@permissions.last])
+      end
+
+      it 'can remove all permissions with an empty array' do
+        expect do
+          @role.permission_ids = []
+          @role.save
+        end.to change { @role.permissions(true) }.from(@permissions).to([])
+      end
+    end
   end
 end
